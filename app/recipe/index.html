@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Categories</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .category-list {
+            list-style: none;
+            padding: 0;
+        }
+        .category-item {
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .category-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .category-description {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Meal Categories</h1>
+        <ul class="category-list" id="categoryList">
+            <!-- Categories will be dynamically added here -->
+        </ul>
+    </div>
+
+    <script>
+        // Fetch meal categories from the API
+        fetch('https://www.themealdb.com/api/json/v1/1/categories.php')
+            .then(response => response.json())
+            .then(data => {
+                const categories = data.categories;
+                const categoryList = document.getElementById('categoryList');
+
+                categories.forEach(category => {
+                    const categoryItem = document.createElement('li');
+                    categoryItem.classList.add('category-item');
+
+                    const categoryName = document.createElement('h2');
+                    categoryName.classList.add('category-name');
+
+                    // Create an anchor tag for each category name
+                    const categoryLink = document.createElement('a');
+                    categoryLink.textContent = category.strCategory;
+                    categoryLink.href = `category.html?name=${category.strCategory}`; // Link to a category page
+                    categoryName.appendChild(categoryLink);
+
+                    const categoryDescription = document.createElement('p');
+                    categoryDescription.classList.add('category-description');
+                    categoryDescription.textContent = category.strCategoryDescription;
+
+                    categoryItem.appendChild(categoryName);
+                    categoryItem.appendChild(categoryDescription);
+                    categoryList.appendChild(categoryItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching meal categories:', error);
+            });
+    </script>
+</body>
+</html>
